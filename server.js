@@ -64,6 +64,10 @@ app.get("/", (req, res) => {
 });
 
 app.get("/search", (req, res) => {
+  res.render("search");
+});
+
+app.get("/searchQuery", (req, res) => {
   let title = req.query.title;
   let url = `${omdbURI}s=${title}`;
 

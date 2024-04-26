@@ -19,9 +19,18 @@ li {
   margin-right: 1rem;
 }
 
+a:hover {
+  color: #333;
+}
+
 a {
   text-decoration: none;
   color: #333;
+}
+
+#search {
+  margin-top: 0rem;
+  padding-top: 0rem;
 }
 
 #title {
@@ -52,9 +61,14 @@ p {
   font-size: 1.5rem;
 }
 
+#total {
+  font-size: 1.25rem;
+  margin-top: 0.25rem;
+}
+
 button {
-  font-size: 1.5rem;
-  margin: 1rem;
+  font-size: 1.25rem;
+  margin: 0.5rem;
   background-color: #ff6b6b;
   color: #fff;
   border: none;
@@ -66,6 +80,7 @@ button {
 
 button:hover {
   background-color: #ff4d4d;
+  cursor: pointer;
 }
 
 button:focus {
@@ -86,4 +101,42 @@ footer p {
   margin: 0;
   padding: 1rem;
   font-size: small;
+}
+
+#results div {
+  margin: 1rem;
+  padding: 1rem;
+  border: 1px solid #f1f1f1;
+  border-radius: 0.25rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+}
+
+#results div img {
+  width: 50px;
+  height: 50px;
+  border-radius: 5%;
+  margin-right: 1rem;
+}
+
+#results div h4 {
+  font-size: 1.5rem;
+}
+
+#results div p {
+  font-size: 1.25rem;
+  /* make it look like a tag */
+  background-color: #f1f1f1;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  margin: 0.5rem;
+}
+
+#results div button {
+  margin-top: 1rem;
+}
+
+#results div button {
+  margin-top: 1rem;
 }

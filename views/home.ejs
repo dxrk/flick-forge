@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="/style.css" />
   </head>
   <body>
-    <!-- nav bar -->
     <nav>
       <ul>
         <li id="title" style="float: left"><a href="/">FlickForge.</a></li>
@@ -17,21 +16,19 @@
       </ul>
     </nav>
 
-    <!-- main content -->
     <main>
       <h2>Welcome to FlickForge!</h2>
       <p>
         FlickForge is a movie search engine that allows you to search for movies
         and view information about them.
       </p>
-      <p>
+      <p id="total">
         Since the site's launch, there have been <%= total %> searches!
       </p>
       <form action="/search" method="get">
         <button type="submit">Search</button>
       </form>
 
-      <!-- button for top searches -->
       <form action="/topSearches" method="get">
         <button type="submit">Top Searches</button>
       </form>
