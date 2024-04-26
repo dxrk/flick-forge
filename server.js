@@ -3,6 +3,7 @@ const fs = require("fs");
 const mongodb = require("mongodb");
 require("dotenv").config();
 const bodyParser = require("body-parser");
+const request = require("request");
 
 const app = express();
 
@@ -12,8 +13,13 @@ if (!port) {
   process.exit(1);
 }
 
-let { MONGO_DB_USERNAME, MONGO_DB_PASSWORD, MONGO_DB_NAME, MONGO_COLLECTION } =
-  process.env;
+let {
+  MONGO_DB_USERNAME,
+  MONGO_DB_PASSWORD,
+  MONGO_DB_NAME,
+  MONGO_COLLECTION,
+  OMDB_API_KEY,
+} = process.env;
 
 if (!MONGO_DB_USERNAME || !MONGO_DB_PASSWORD || !MONGO_DB_NAME) {
   console.error("Missing required environment variables");
@@ -21,6 +27,7 @@ if (!MONGO_DB_USERNAME || !MONGO_DB_PASSWORD || !MONGO_DB_NAME) {
 }
 
 let mongoURI = `mongodb+srv://${MONGO_DB_USERNAME}:${MONGO_DB_PASSWORD}@cmsc335.bj3jw0t.mongodb.net/${MONGO_DB_NAME}`;
+let omdbURI = `http://www.omdbapi.com/?apikey=${OMDB_API_KEY}&`;
 
 let mongoClient = new mongodb.MongoClient(mongoURI);
 
@@ -43,7 +50,100 @@ app.get("/", (req, res) => {
   res.render("home.ejs");
 });
 
-// TODO: Implement rest of server
+app.get("/search", (req, res) => {
+  let title = req.query.title;
+  let url = `${omdbURI}s=${title}`;
+
+  request(url, (err, response, body) => {
+    if (err) {
+      res.status(500).send("Error fetching data from OMDB API");
+      return;
+    }
+
+    let data = JSON.parse(body);
+    if (data.Response === "False") {
+      res.status(404).send("No results found");
+      return;
+    }
+
+    res.json(data);
+  });
+});
+
+app.get("/movie/:id", (req, res) => {
+  let id = req.params.id;
+  let url = `${omdbURI}i=${id}`;
+
+  request(url, (err, response, body) => {
+    if (err) {
+      res.status(500).send("Error fetching data from OMDB API");
+      return;
+    }
+
+    let data = JSON.parse(body);
+    if (data.Response === "False") {
+      res.status(404).send("No results found");
+      return;
+    }
+
+    res.json(data);
+  });
+});
+
+app.get("/topSearches", (req, res) => {
+  collection.find({}).toArray((err, result) => {
+    if (err) {
+      res.status(500).send("Error fetching data from database");
+      return;
+    }
+
+    res.json(result);
+  });
+});
+
+app.post("/addView", (req, res) => {
+  let title = req.body.title;
+  let url = `${omdbURI}t=${title}`;
+
+  request(url, (err, response, body) => {
+    if (err) {
+      res.status(500).send("Error fetching data from OMDB API");
+      return;
+    }
+
+    let data = JSON.parse(body);
+    if (data.Response === "False") {
+      res.status(404).send("No results found");
+      return;
+    }
+
+    collection.findOne({ title: title }, (err, result) => {
+      if (err) {
+        res.status(500).send("Error fetching data from database");
+        return;
+      }
+
+      if (!result) {
+        collection.insertOne({ title: title, tally: 1 });
+      } else {
+        collection.updateOne({ title: title }, { $inc: { tally: 1 } });
+      }
+
+      res.status(200).send("Movie added successfully");
+    });
+  });
+});
+
+app.get("/admin/clear", (req, res) => {
+  collection.deleteMany({}, (err, result) => {
+    if (err) {
+      res.status(500).send("Error clearing database");
+      return;
+    }
+
+    res.status(200).send("Database cleared successfully");
+  });
+});
 
 app.listen(port);
 console.log(`Web server started and running at http://localhost:${port}`);
