@@ -1,0 +1,89 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+body {
+  font-family: "Inter", sans-serif;
+}
+
+/* style for nav bar */
+nav {
+  background-color: #f8f9fa;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+}
+
+li {
+  display: inline;
+  margin-right: 1rem;
+}
+
+a {
+  text-decoration: none;
+  color: #333;
+}
+
+#title {
+  font-size: 1.5rem;
+  font-weight: 1000;
+}
+
+/* this is html for reference
+...
+*/
+
+/* display title, then description right below. then the search and top buttons */
+main {
+  text-align: center;
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+p {
+  font-size: 1.5rem;
+}
+
+button {
+  font-size: 1.5rem;
+  margin: 1rem;
+  background-color: #ff6b6b;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #ff4d4d;
+}
+
+button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.4);
+}
+
+footer {
+  background-color: #f8f9fa;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  left: 0;
+}
+
+footer p {
+  text-align: center;
+  margin: 0;
+  padding: 1rem;
+  font-size: small;
+}

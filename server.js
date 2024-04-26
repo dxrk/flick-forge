@@ -44,10 +44,23 @@ let collection = db.collection(MONGO_COLLECTION);
 app.set("view engine", "ejs");
 
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static("public"));
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.render("home.ejs");
+  let total = 0;
+  collection
+    .aggregate([{ $group: { _id: null, total: { $sum: "$tally" } } }])
+    .toArray((err, result) => {
+      if (err) {
+        res.status(500).send("Error fetching data from database");
+        return;
+      }
+
+      total = result[0].total;
+    });
+
+  res.render("home", { total: total });
 });
 
 app.get("/search", (req, res) => {
