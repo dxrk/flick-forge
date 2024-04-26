@@ -1,6 +1,6 @@
 # FlickForge
 
-**Submitted by:** William Gold (directory id: superterp)
+**Submitted by:** William Gold (wgold)
 
 **Group Members:** William Gold (wgold), Benjamin Talesnik (btalesni)
 
