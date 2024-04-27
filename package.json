@@ -2,8 +2,9 @@
   "name": "flick-forge",
   "version": "1.0.0",
   "description": "Final Project for CMSC335 Spring 2024",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Ben Talesnik & Billy Gold",
