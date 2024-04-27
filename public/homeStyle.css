@@ -1,0 +1,98 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+body {
+  font-family: "Inter", sans-serif;
+}
+
+nav {
+  background-color: #f8f9fa;
+  margin: 2rem;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+}
+
+li {
+  display: inline;
+  margin-right: 1rem;
+}
+
+a:hover {
+  color: #333;
+}
+
+a {
+  text-decoration: none;
+  color: #333;
+}
+
+#search {
+  margin-top: 0rem;
+  padding-top: 0rem;
+}
+
+#title {
+  font-size: 1.5rem;
+  font-weight: 1000;
+}
+
+main {
+  text-align: center;
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+p {
+  font-size: 1.5rem;
+}
+
+#total {
+  font-size: 1.25rem;
+  margin-top: 0.25rem;
+}
+
+button {
+  font-size: 1.25rem;
+  margin: 0.5rem;
+  background-color: #ff6b6b;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #ff4d4d;
+  cursor: pointer;
+}
+
+button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.4);
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  left: 0;
+}
+
+footer p {
+  text-align: center;
+  margin: 0;
+  padding: 1rem;
+  font-size: small;
+}

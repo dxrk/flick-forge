@@ -3,7 +3,24 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>FlickForge. | Top Searches</title>
+    <link rel="stylesheet" href="/topSearchesStyle.css" />
   </head>
-  <body></body>
+  <body>
+    <nav>
+      <ul>
+        <li id="title" style="float: left"><a href="/">FlickForge.</a></li>
+        <li style="float: right"><a href="/search">Search</a></li>
+        <li style="float: right"><a href="/topSearches">Top Searches</a></li>
+      </ul>
+    </nav>
+
+    <main>
+      <h3>Top Searches</h3>
+      <div id="top-table"><%- topSearches %></div>
+    </main>
+    <footer>
+      <p>Created 2024, by Ben Talesnik & Billy Gold</p>
+    </footer>
+  </body>
 </html>

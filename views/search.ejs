@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link rel="stylesheet" href="/style.css" />
+    <title>FlickForge. | Search</title>
+    <link rel="stylesheet" href="/searchStyle.css" />
   </head>
   <body>
     <nav>
@@ -14,78 +14,81 @@
         <li style="float: right"><a href="/topSearches">Top Searches</a></li>
       </ul>
     </nav>
-    
-      <div id="search">
+
     <main>
-        <h3>Search</h3>
-        <form>
-          <label for="query">Search:</label>
-          <input type="text" id="query" name="query" />
-          <button type="button" onclick="getSearchResults()">Submit</button>
-          <button type="reset">Reset</button>
-        </form>
-      </div>
-      <div id="results">
-        <h3>Results</h3>
-        <div id="master-box">
-        </div>
-      </div>
+      <h3>Search</h3>
+      <form>
+        <input type="text" id="query" name="query" />
+        <br />
+        <button type="button" onclick="getSearchResults()">Submit</button>
+        <button type="reset">Reset</button>
+      </form>
+      <h3 id="results-title">Results</h3>
+      <div id="master-box"></div>
     </main>
-     </div>
+    <footer>
+      <p>Created 2024, by Ben Talesnik & Billy Gold</p>
+    </footer>
+
+    <script>
+      async function getSearchResults() {
+        const query = document.getElementById("query").value;
+        const response = await fetch(`/searchQuery?title=${query}`);
+        const data = await response.json();
+        const results = document.getElementById("master-box");
+        results.innerHTML = "";
+
+        const resultsTitle = document.getElementById("results-title");
+        resultsTitle.textContent = `Results for "${query}"`;
+        resultsTitle.style.textTransform = "capitalize";
+        resultsTitle.style.display = "block";
+
+        data.Search.forEach((movie) => {
+          const movieDiv = document.createElement("div");
+
+          const img = document.createElement("img");
+          img.src = movie.Poster;
+          img.alt = movie.Title;
+          img.style.width = "100px";
+          img.style.height = "150px";
+          movieDiv.appendChild(img);
+
+          const title = document.createElement("h4");
+          title.textContent = movie.Title;
+          movieDiv.appendChild(title);
+
+          const br = document.createElement("br");
+          movieDiv.appendChild(br);
+
+          const br2 = document.createElement("br");
+          movieDiv.appendChild(br2);
+
+          const year = document.createElement("p");
+          year.textContent = movie.Year;
+          movieDiv.appendChild(year);
+
+          const type = document.createElement("p");
+          type.textContent = movie.Type;
+          movieDiv.appendChild(type);
+
+          movieDiv.id = movie.imdbID;
+          results.appendChild(movieDiv);
+
+          const button = document.createElement("button");
+          button.textContent = "See More";
+          button.className = "see-more";
+          button.onclick = () => {
+            window.location.href = `/movie/${movie.imdbID}`;
+          };
+          movieDiv.appendChild(button);
+        });
+
+        if (data.Search.length === 0) {
+          const noResults = document.createElement("p");
+          noResults.textContent = "No results found.";
+          results.appendChild(noResults);
+        }
+      }
+    </script>
   </body>
-  <script>
-    async function getSearchResults() {
-      const query = document.getElementById("query").value;
-      const response = await fetch(`/searchQuery?title=${query}`);
-      const data = await response.json();
-      const results = document.getElementById("results");
-      results.innerHTML = "";
-      
-      data.Search.forEach((movie) => {
-        const movieDiv = document.createElement("div");
-
-        // create the image
-        const img = document.createElement("img");
-        img.src = movie.Poster;
-        img.alt = movie.Title;
-        img.style.width = "100px";
-        img.style.height = "150px";
-        movieDiv.appendChild(img);
-
-        // create the title
-        const title = document.createElement("h4");
-        title.textContent = movie.Title;
-        movieDiv.appendChild(title);
-
-        const br = document.createElement("br");
-        movieDiv.appendChild(br);
-
-        const br2 = document.createElement("br");
-        movieDiv.appendChild(br2);
-
-        // create the year
-        const year = document.createElement("p");
-        year.textContent = movie.Year;
-        movieDiv.appendChild(year);
-
-        // create the type
-        const type = document.createElement("p");
-        type.textContent = movie.Type;
-        movieDiv.appendChild(type);
-
-        movieDiv.id = movie.imdbID;
-        results.appendChild(movieDiv);
-
-        // button, "see more" that will take you to the movie page
-        const button = document.createElement("button");
-        button.textContent = "See More";
-        button.onclick = () => {
-          window.location.href = `/movie/${movie.imdbID}`;
-        };
-        movieDiv.appendChild(button);
-      });
-
-      const movieDivs = document.querySelectorAll("#results > div");
-    }
-  </script>
 </html>

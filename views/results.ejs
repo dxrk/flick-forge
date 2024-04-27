@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>FlickForge. | <%= movie.Title %></title>
+    <link rel="stylesheet" href="/resultsStyle.css" />
   </head>
   <body>
     <nav>
@@ -12,11 +13,25 @@
         <li style="float: right"><a href="/search">Search</a></li>
         <li style="float: right"><a href="/topSearches">Top Searches</a></li>
       </ul>
-      </ul>
     </nav>
-
     <main>
-      <h2>Results</h2>
+      <div class="container">
+        <div class="poster">
+          <img src="<%= movie.Poster %>" alt="<%= movie.Title %> Poster" />
+        </div>
+        <div class="details">
+          <h2><%= movie.Title %> (<%= movie.Year %>)</h2>
+          <p><strong>Director:</strong> <%= movie.Director %></p>
+          <p><strong>Writer:</strong> <%= movie.Writer %></p>
+          <p><strong>Actors:</strong> <%= movie.Actors %></p>
+          <p><strong>Genre:</strong> <%= movie.Genre %></p>
+          <p><strong>Plot:</strong> <%= movie.Plot %></p>
+          <p><strong>IMDB Rating:</strong> <%= movie.imdbRating %></p>
+        </div>
+      </div>
     </main>
+    <footer>
+      <p>Created 2024, by Ben Talesnik & Billy Gold</p>
+    </footer>
   </body>
 </html>

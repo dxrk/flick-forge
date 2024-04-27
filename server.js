@@ -47,20 +47,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  let total = 0;
-  collection
-    .aggregate([{ $group: { _id: null, total: { $sum: "$tally" } } }])
-    .toArray((err, result) => {
-      if (err) {
-        res.status(500).send("Error fetching data from database");
-        return;
-      }
+app.get("/", async (req, res) => {
+  const docs = await collection.find({}).toArray();
 
-      total = result[0].total;
-    });
+  let total = docs.reduce((acc, doc) => acc + doc.tally, 0);
 
-  res.render("home", { total: total });
+  res.render("home", { total });
 });
 
 app.get("/search", (req, res) => {
@@ -103,52 +95,48 @@ app.get("/movie/:id", (req, res) => {
       return;
     }
 
-    res.json(data);
+    collection.updateOne(
+      { imdbID: data.imdbID, info: data },
+      { $inc: { tally: 1 } },
+      { upsert: true }
+    );
+
+    res.render("results", { movie: data });
   });
 });
 
-app.get("/topSearches", (req, res) => {
-  collection.find({}).toArray((err, result) => {
-    if (err) {
-      res.status(500).send("Error fetching data from database");
-      return;
-    }
+app.get("/topSearches", async (req, res) => {
+  // ping the collection
+  const docs = await collection.find({}).limit(10).toArray();
 
-    res.json(result);
+  // sort the documents by the tally field
+  docs.sort((a, b) => b.tally - a.tally);
+
+  let topSearchesTable = `<table>
+      <tr>
+        <th>Rank</th>
+        <th>Title</th>
+        <th>Year</th>
+        <th>Poster</th>
+        <th>Tally</th>
+      </tr>
+  `;
+
+  docs.forEach((doc) => {
+    topSearchesTable += `
+      <tr>
+        <td>${docs.indexOf(doc) + 1}</td>
+        <td>${doc.info.Title}</td>
+        <td>${doc.info.Year}</td>
+        <td><img src="${doc.info.Poster}" alt="${doc.info.Title}"></td>
+        <td>${doc.tally}</td>
+      </tr>
+    `;
   });
-});
 
-app.post("/addView", (req, res) => {
-  let title = req.body.title;
-  let url = `${omdbURI}t=${title}`;
+  topSearchesTable += "</table>";
 
-  request(url, (err, response, body) => {
-    if (err) {
-      res.status(500).send("Error fetching data from OMDB API");
-      return;
-    }
-
-    let data = JSON.parse(body);
-    if (data.Response === "False") {
-      res.status(404).send("No results found");
-      return;
-    }
-
-    collection.findOne({ title: title }, (err, result) => {
-      if (err) {
-        res.status(500).send("Error fetching data from database");
-        return;
-      }
-
-      if (!result) {
-        collection.insertOne({ title: title, tally: 1 });
-      } else {
-        collection.updateOne({ title: title }, { $inc: { tally: 1 } });
-      }
-
-      res.status(200).send("Movie added successfully");
-    });
-  });
+  res.render("topSearches", { topSearches: topSearchesTable });
 });
 
 app.get("/admin/clear", (req, res) => {

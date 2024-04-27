@@ -3,16 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link rel="stylesheet" href="/style.css" />
+    <title>FlickForge. | Home</title>
+    <link rel="stylesheet" href="/homeStyle.css" />
   </head>
   <body>
     <nav>
       <ul>
-        <li id="title" style="float: left"><a href="/">FlickForge.</a></li>
+        <li style="float: left" id="title"><a href="/">FlickForge.</a></li>
         <li style="float: right"><a href="/search">Search</a></li>
         <li style="float: right"><a href="/topSearches">Top Searches</a></li>
-      </ul>
       </ul>
     </nav>
 
@@ -23,7 +22,8 @@
         and view information about them.
       </p>
       <p id="total">
-        Since the site's launch, there have been <%= total %> searches!
+        Since the site's launch, there have been
+        <strong><%= total %></strong> finds!
       </p>
       <form action="/search" method="get">
         <button type="submit">Search</button>
