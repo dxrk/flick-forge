@@ -152,17 +152,17 @@ app.get("/admin/clear", (req, res) => {
 app.listen(port);
 console.log(`Web server started and running at http://localhost:${port}`);
 
-process.stdin.resume();
-process.stdin.setEncoding("utf8");
-process.stdin.write("Stop to shutdown the server: ");
+// process.stdin.resume();
+// process.stdin.setEncoding("utf8");
+// process.stdin.write("Stop to shutdown the server: ");
 
-process.stdin.on("data", (text) => {
-  if (text === "stop\n") {
-    process.stdin.write("Shutting down the server");
-    process.exit(0);
-  } else {
-    process.stdin.write(`Invalid command: ${text}`);
-  }
+// process.stdin.on("data", (text) => {
+//   if (text === "stop\n") {
+//     process.stdin.write("Shutting down the server");
+//     process.exit(0);
+//   } else {
+//     process.stdin.write(`Invalid command: ${text}`);
+//   }
 
-  process.stdin.write("Stop to shutdown the server: ");
-});
+//   process.stdin.write("Stop to shutdown the server: ");
+// });
