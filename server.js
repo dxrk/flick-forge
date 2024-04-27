@@ -9,8 +9,7 @@ const app = express();
 
 let port = process.argv[2];
 if (!port) {
-  console.error("Usage: node summerCampServer.js PORT_NUMBER_HERE");
-  process.exit(1);
+  port = 3000 || process.env.PORT;
 }
 
 let {
