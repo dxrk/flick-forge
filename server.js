@@ -9,7 +9,7 @@ const app = express();
 
 let port = process.argv[2];
 if (!port) {
-  port = 3000 || process.env.PORT;
+  port = process.env.PORT || 3000;
 }
 
 let {
