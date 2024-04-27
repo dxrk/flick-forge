@@ -105,10 +105,7 @@ app.get("/movie/:id", (req, res) => {
 });
 
 app.get("/topSearches", async (req, res) => {
-  // ping the collection
   const docs = await collection.find({}).limit(10).toArray();
-
-  // sort the documents by the tally field
   docs.sort((a, b) => b.tally - a.tally);
 
   let topSearchesTable = `<table>
@@ -151,6 +148,8 @@ app.get("/admin/clear", (req, res) => {
 
 app.listen(port);
 console.log(`Web server started and running at http://localhost:${port}`);
+
+// DISABLED BECAUSE OF HOSTING ON HEROKU - UNCOMMENT TO ENABLE
 
 // process.stdin.resume();
 // process.stdin.setEncoding("utf8");
