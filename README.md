@@ -6,7 +6,7 @@
 
 **App Description:** FlickForge is a movie search engine that allows you to search for movies and view information about them.
 
-**YouTube Video Link:** wip
+**YouTube Video Link:** https://www.youtube.com/watch?v=I-2A0SDg23M%5C
 
 **APIs:** [OMDb API](https://www.omdbapi.com/)
 
