@@ -69,8 +69,9 @@ app.get("/searchQuery", (req, res) => {
     }
 
     let data = JSON.parse(body);
+    console.log(data.Response);
     if (data.Response === "False") {
-      res.status(404).send("No results found");
+      res.status(404).json({ error: "No results found", Search: [] });
       return;
     }
 

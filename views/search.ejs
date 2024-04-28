@@ -18,7 +18,12 @@
     <main>
       <h3>Search</h3>
       <form>
-        <input type="text" id="query" name="query" />
+        <input
+          type="text"
+          id="query"
+          name="query"
+          onkeydown="if (event.key === 'Enter') { event.preventDefault(); getSearchResults(); }"
+        />
         <br />
         <button type="button" onclick="getSearchResults()">Submit</button>
         <button type="reset">Reset</button>
@@ -84,6 +89,10 @@
         });
 
         if (data.Search.length === 0) {
+          // Fills the left box so the message is in the middle.
+          const filler = document.createElement("p");
+          results.appendChild(noResults);
+
           const noResults = document.createElement("p");
           noResults.textContent = "No results found.";
           results.appendChild(noResults);
