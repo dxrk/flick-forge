@@ -36,6 +36,7 @@
     </footer>
 
     <script>
+      // Function to get search results from the server.
       async function getSearchResults() {
         const query = document.getElementById("query").value;
         const response = await fetch(`/searchQuery?title=${query}`);
@@ -48,7 +49,9 @@
         resultsTitle.style.textTransform = "capitalize";
         resultsTitle.style.display = "block";
 
+        // If there are results, display them.
         data.Search.forEach((movie) => {
+          // Create a div for each movie.
           const movieDiv = document.createElement("div");
 
           const img = document.createElement("img");
@@ -88,6 +91,7 @@
           movieDiv.appendChild(button);
         });
 
+        // If there are no results, display a message.
         if (data.Search.length === 0) {
           // Fills the left box so the message is in the middle.
           const filler = document.createElement("p");

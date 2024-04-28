@@ -1,17 +1,16 @@
 const express = require("express");
-const fs = require("fs");
 const mongodb = require("mongodb");
 require("dotenv").config();
 const bodyParser = require("body-parser");
 const request = require("request");
 
-const app = express();
-
+// Check if a port is provided as an argument or environment variable.
 let port = process.argv[2];
 if (!port) {
   port = process.env.PORT || 3000;
 }
 
+// Load environment variables from .env file.
 let {
   MONGO_DB_USERNAME,
   MONGO_DB_PASSWORD,
@@ -20,16 +19,18 @@ let {
   OMDB_API_KEY,
 } = process.env;
 
+// Check if required environment variables are set.
 if (!MONGO_DB_USERNAME || !MONGO_DB_PASSWORD || !MONGO_DB_NAME) {
   console.error("Missing required environment variables");
   process.exit(1);
 }
 
+// Set up MongoDB and OMDB URIs.
 let mongoURI = `mongodb+srv://${MONGO_DB_USERNAME}:${MONGO_DB_PASSWORD}@cmsc335.bj3jw0t.mongodb.net/${MONGO_DB_NAME}`;
 let omdbURI = `http://www.omdbapi.com/?apikey=${OMDB_API_KEY}&`;
 
+// Connect to MongoDB.
 let mongoClient = new mongodb.MongoClient(mongoURI);
-
 mongoClient.connect((err) => {
   if (err) {
     console.error(err);
@@ -37,27 +38,34 @@ mongoClient.connect((err) => {
   }
 });
 
+// Set up MongoDB collection.
 let db = mongoClient.db(MONGO_DB_NAME);
 let collection = db.collection(MONGO_COLLECTION);
 
+// Set up Express app.
+const app = express();
 app.set("view engine", "ejs");
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(express.json());
 
+// GET home page.
 app.get("/", async (req, res) => {
   const docs = await collection.find({}).toArray();
 
+  // Calculate total tally.
   let total = docs.reduce((acc, doc) => acc + doc.tally, 0);
 
+  // Render home page with total.
   res.render("home", { total });
 });
 
+// GET search page.
 app.get("/search", (req, res) => {
   res.render("search");
 });
 
+// GET search query results.
 app.get("/searchQuery", (req, res) => {
   let title = req.query.title;
   let url = `${omdbURI}s=${title}`;
@@ -68,8 +76,8 @@ app.get("/searchQuery", (req, res) => {
       return;
     }
 
+    // Fetch movie details from OMDB API.
     let data = JSON.parse(body);
-    console.log(data.Response);
     if (data.Response === "False") {
       res.status(404).json({ error: "No results found", Search: [] });
       return;
@@ -79,10 +87,12 @@ app.get("/searchQuery", (req, res) => {
   });
 });
 
+// GET movie details.
 app.get("/movie/:id", (req, res) => {
   let id = req.params.id;
   let url = `${omdbURI}i=${id}`;
 
+  // Fetch movie details from OMDB API.
   request(url, (err, response, body) => {
     if (err) {
       res.status(500).send("Error fetching data from OMDB API");
@@ -95,6 +105,7 @@ app.get("/movie/:id", (req, res) => {
       return;
     }
 
+    // Update database with search tally.
     collection.updateOne(
       { imdbID: data.imdbID, info: data },
       { $inc: { tally: 1 } },
@@ -105,10 +116,13 @@ app.get("/movie/:id", (req, res) => {
   });
 });
 
+// GET top searches page.
 app.get("/topSearches", async (req, res) => {
+  // Get top 10 searches from database.
   const docs = await collection.find({}).limit(10).toArray();
   docs.sort((a, b) => b.tally - a.tally);
 
+  // Create table with top searches.
   let topSearchesTable = `<table>
       <tr>
         <th>Rank</th>
@@ -119,6 +133,7 @@ app.get("/topSearches", async (req, res) => {
       </tr>
   `;
 
+  // For each, add a row to the table.
   docs.forEach((doc) => {
     topSearchesTable += `
       <tr>
@@ -136,6 +151,7 @@ app.get("/topSearches", async (req, res) => {
   res.render("topSearches", { topSearches: topSearchesTable });
 });
 
+// GET admin clear page.
 app.get("/admin/clear", (req, res) => {
   collection.deleteMany({}, (err, result) => {
     if (err) {
