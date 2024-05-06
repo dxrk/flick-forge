@@ -118,7 +118,7 @@ app.get("/movie/:id", (req, res) => {
 
 // GET top searches page.
 app.get("/topSearches", async (req, res) => {
-  // Get top 10 searches from database.
+  // Get top searches from database.
   const docs = await collection.find({}).toArray();
   docs.sort((a, b) => b.tally - a.tally);
 
