@@ -121,7 +121,6 @@ app.get("/topSearches", async (req, res) => {
   // Get top 10 searches from database.
   const docs = await collection.find({}).toArray();
   docs.sort((a, b) => b.tally - a.tally);
-  docs.splice(10);
 
   // Create table with top searches.
   let topSearchesTable = `<table>
