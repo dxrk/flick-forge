@@ -119,8 +119,9 @@ app.get("/movie/:id", (req, res) => {
 // GET top searches page.
 app.get("/topSearches", async (req, res) => {
   // Get top 10 searches from database.
-  const docs = await collection.find({}).limit(10).toArray();
+  const docs = await collection.find({}).toArray();
   docs.sort((a, b) => b.tally - a.tally);
+  docs.splice(10);
 
   // Create table with top searches.
   let topSearchesTable = `<table>
@@ -138,7 +139,7 @@ app.get("/topSearches", async (req, res) => {
     topSearchesTable += `
       <tr>
         <td>${docs.indexOf(doc) + 1}</td>
-        <td>${doc.info.Title}</td>
+        <td><a href="/movie/${doc.imdbID}">${doc.info.Title}</a></td>
         <td>${doc.info.Year}</td>
         <td><img src="${doc.info.Poster}" alt="${doc.info.Title}"></td>
         <td>${doc.tally}</td>
